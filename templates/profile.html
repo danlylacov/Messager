@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <p>Fistname: {{ user.firstname }}</p>
+    <p>Lastname: {{ user.lastname }}</p>
+
+    <a href="/user/{{user.username}}/send_message">Отправить сообщение</a>
+    <a href="{{ url_for('main') }}">Back to Home</a>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+</body>
+</html>
