@@ -9,6 +9,7 @@
     <p>Lastname: {{ user.lastname }}</p>
 
     <a href="/user/{{user.username}}/send_message">Отправить сообщение</a>
+    <a href="/user/{{user.username}}/show_messages">Входящие сообщения</a>
     <a href="{{ url_for('main') }}">Back to Home</a>
 
     {% if error %}

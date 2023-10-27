@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>Входящие сообщения</h1>
+
+
+    {% for name in sender_names %}
+
+        <a href="/user/{{username}}/show_messages/{{name.id}}">{{ name.firstname }} {{name.lastname}}</a><br><br>
+
+
+
+    {% endfor %}
+
+
+
+    <a href="/user/{{username}}">Back to Home</a>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ from time import time
 from models import User, Message
 from app import app, db
 import requests
+import datetime
 
 
 database = []
@@ -146,5 +147,69 @@ def senddd_message(username):
                                  })
 
     return render_template('send_message.html', user = user_data)
+
+
+@app.route('/user/<username>/show_messages', methods=['GET', 'POST'])
+def show_messages(username):
+    user_data = User.query.filter_by(username=username).first()
+    user_data = {'firstname': user_data.firstname, 'lastname': user_data.lastname, 'id': user_data.id,
+                 'username': username}
+
+
+    messages = Message.query.filter_by(reciever=user_data['id']).all()
+
+    sender_ids = []
+
+    for message in messages:
+        sender_ids.append(message.sender)
+
+    sender_ids = list(set(sender_ids))
+    sender_names = []
+    for i in range(len(sender_ids)):
+        user = User.query.filter_by(id=sender_ids[i]).first()
+        sender_names.append({'firstname' : str(user.firstname), 'lastname' : str(user.lastname), 'id' : sender_ids[i]})
+
+
+    return render_template('show_messages.html', sender_names=sender_names, username=username)
+
+
+@app.route('/user/<username>/show_messages/<id>', methods=['GET', 'POST'])
+def show_chat(username, id):
+    def time_from_UNIX(unix_time: float):
+        time = datetime.datetime.fromtimestamp(unix_time)
+        formated_time = time.strftime('%Y-%m-%d %H:%M:%S')
+        return formated_time
+
+    me= User.query.filter_by(username=username).first()
+    me_id = me.id
+
+    messages_from = Message.query.filter_by(reciever=int(id), sender=me_id).all()
+    messages_to = Message.query.filter_by(reciever=me_id, sender=int(id)).all()
+
+    result = []
+    for message in messages_from:
+        sender = User.query.filter_by(id=id).first()
+        result.append( { 'message' : message.text, 'sender' : username, 'time' : time_from_UNIX(float(message.time)) } )
+    for message in messages_to:
+        result.append( { 'message' : message.text, 'sender' : sender.username, 'time' : time_from_UNIX(float(message.time)) } )
+
+    result = sorted(result, key=lambda x: x['time'])
+
+    if request.method == 'POST':
+        reciever_id = id
+
+        text = request.form['text']
+        print(reciever_id)
+        response = requests.post(url='http://127.0.0.1:5000/send',
+                                 json={
+                                     'text': text,
+                                     'sender': me_id,
+                                     'reciever': int(reciever_id)
+                                 })
+
+        return redirect(url_for('show_chat', username=username, id=id))
+
+
+    return render_template('chat.html', messages=result, sender=sender)
 
 
