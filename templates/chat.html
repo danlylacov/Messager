@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Chat with {{ sender.username }}</h1>
+
+    <ul id="messageList">
+        {% for message in messages %}
+            <li>
+                {{ message['message'] }} - Sender: {{ message['sender'] }} - Time: {{ message['time']}}
+            </li>
+        {% endfor %}
+    </ul>
+        <h1>Отправить сообщение</h1>
+    <form id="messageForm" method="POST" action="">
+    <label for="text">text:</label>
+    <input type="text" id="text" name="text" required><br><br>
+    <input type="submit" value="Отправить" id="submitButton"><br><br>
+    </form>
+
+
+
+</body>
+</html>
