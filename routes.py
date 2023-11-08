@@ -58,14 +58,20 @@ def registaration():
         firstname = request.form['firstname']
         lastname = request.form['lastname']
 
+        rsa = RSA()
 
+        keys = rsa.create_keys()
+        publickey = str(keys[0])
+        privatekey = str(keys[1])
 
+        make_response().set_cookie('ded','ceeceec')
 
         new_user = User(
             username = username,
             password = password,
             firstname = firstname,
-            lastname = lastname
+            lastname = lastname,
+            publickey = publickey
         )
         db.session.add(new_user)
         db.session.commit()
@@ -191,10 +197,20 @@ def show_chat(username, id):
     return render_template('chat.html', messages=result, sender=sender)
 
 
-@app.route('/cookie/')
+
+# оно работает только с путем, просто привызове не работает, надо разобраться
+@app.route('/cookie')
 def cookie():
     res = make_response("Setting a cookie")
     res.set_cookie('foo', 'bar', max_age=60*60*24*365*2)
     return res
+
+@app.route('/get_cookie')
+def get_cookie_value():
+    cookie_value = request.cookies.get('foo')
+    if cookie_value is not None:
+        return f"Значение файла cookie 'my_cookie': {cookie_value}"
+    else:
+        return "Файл cookie 'my_cookie' не найден."
 
 

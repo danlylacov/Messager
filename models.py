@@ -8,6 +8,7 @@ class User(db.Model):
     firstname = db.Column(db.String(80), nullable=False)
     lastname = db.Column(db.String(80), nullable=False)
     password = db.Column(db.String(80), nullable=False)
+    publickey = db.Column(db.String(10000), nullable=False)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.id}')"
