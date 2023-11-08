@@ -1,9 +1,11 @@
-from flask import request, abort, redirect, url_for, render_template
+from flask import request, redirect, url_for, render_template, make_response
 from time import time
 from models import User, Message
 from app import app, db
 import requests
 import datetime
+from cryptography.bcrypt import Bcrypt
+from cryptography.RSA import RSA
 
 
 database = []
@@ -19,18 +21,6 @@ database = []
 def main():
     return render_template("home.html")
 
-
-
-
-
-@app.route("/status")
-def status():
-    return {
-        'status': True,
-        'name': 'Messenger',
-        'time': time(),
-        'count_user': len(set(message['name'] for message in database))
-    }
 
 
 @app.route("/send", methods=['POST'])
@@ -58,29 +48,17 @@ def send_message():
     return {'ok': True}
 
 
-@app.route("/messages")
-def get_message():
-    try:
-        after = float(request.args['after'])
-    except Exception as ex:
-        print(ex)
-        return abort(400)
-    messages = []
-
-    for message in database:
-        if message['time'] > after:
-            messages.append(message)
-
-    return {'messages': messages[:50]}
 
 
 @app.route("/register", methods = ['POST', 'GET'])
 def registaration():
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
+        password = Bcrypt.hash_password(request.form['password'].encode())
         firstname = request.form['firstname']
         lastname = request.form['lastname']
+
+
 
 
         new_user = User(
@@ -111,7 +89,7 @@ def enter():
         username = request.form['username']
         password = request.form['password']
 
-        if get_user_credentials(str(username)) == str(password):
+        if Bcrypt.check_password(password.encode(), get_user_credentials(str(username))):
             return redirect(url_for('profile', username=username))
         else:
             return render_template('enter.html', error="Invalid username or password. Please try again.")
@@ -211,5 +189,12 @@ def show_chat(username, id):
 
 
     return render_template('chat.html', messages=result, sender=sender)
+
+
+@app.route('/cookie/')
+def cookie():
+    res = make_response("Setting a cookie")
+    res.set_cookie('foo', 'bar', max_age=60*60*24*365*2)
+    return res
 
 
