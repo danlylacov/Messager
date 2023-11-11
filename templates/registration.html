@@ -2,15 +2,20 @@
 <html>
 <head>
     <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Register</h1>
-    <form method="POST">
-        <input type="text" name="username" placeholder="Username" required><br>
-        <input type="text" name="firstname" placeholder="Firstname" required><br>
-        <input type="text" name="lastname" placeholder="Lastname" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
-        <input type="submit" value="Register">
+    <form method="POST" class="banner__home">
+        <ul class="style__list">
+            <li class="login__list"> <h2>Register</h2></li>
+            <li class="login__list"> <input class="form__input" type="text" name="username" placeholder="Username" required> </li>
+            <li class="login__list"><input class="form__input" type="text" name="firstname" placeholder="Firstname" required></li>
+            <li class="login__list"><input class="form__input" type="text" name="lastname" placeholder="Lastname" required></li>
+            <li class="login__list"><input class="form__input" type="password" name="password" placeholder="Password" required></li>
+            <li class="login__list"><input class="input__submit" type="submit" value="Register"></li>
+
+        </ul>
+
     </form>
 </body>
 </html>

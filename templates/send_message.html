@@ -1,18 +1,24 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>User Profile</title>
+   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Отправить сообщение</h1>
-    <form method="POST">
-        <label for="username">username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="text">text:</label>
-        <input type="text" id="text" name="text" required><br><br>
-        <input type="submit" value="Отправить"><br><br>
+
+    <form method="POST" class="banner__home">
+        <ul class="style__list">
+            <li class="login__list"> <h2>Send a message</h2></li>
+            <li class="login__list"> <input class="form__input" placeholder="Username" type="text" id="username" name="username" required> </li>
+            <li class="login__list"> <input class="form__input" placeholder="Text"  type="text" id="text" name="text" required> </li>
+            <li class="login__list"> <input class="input__submit" type="submit" value="Submit"> </li>
+            <li class="login__list"> <a href="/user/{{user.username}}" class="btm">Go back to the main menu</a></li>
+
+
+        </ul>
+
     </form>
-     <a href="/user/{{user.username}}">Вернуться в главное меню</a>
 
     {% if error %}
         <p>{{ error }}</p>

@@ -1,25 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Kadwa&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&family=Kadwa&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+
+    font-family: 'Kadwa', serif;
     text-align: center;
-    margin: 50px;
+    font-size: 16px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    color: #fff; 
+    background: linear-gradient(180deg, #2361FF 2.58%, rgba(158, 124, 255, 0.00) 125.8%)
+    no-repeat;
+    height: 100vh;
+
+    
 }
 
-h1 {
-    color: #333;
+.menu__home{
+    padding-top: 10px;
+   
+}
+
+.style__list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 a {
+    font-family: 'Kadwa', serif;
     display: block;
-    margin: 10px 0;
+    margin: 40px;
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 16px;
     transition: background-color 0.3s;
 }
 
 a:hover {
     background-color: #0056b3;
+    font-family: 'Kadwa', serif;
+    }
+
+.banner__home{
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(0, 133, 255, 0.87) 0%, rgba(173, 0, 255, 0.00) 145.41%);
+    width: 550px;
+    height: auto;
+    margin: auto;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    display: block; 
 }
+.btm{
+    width: 300px;
+    height: 35px;
+    border-radius: 20px;
+    background: #59249C;
+    margin: auto;
+    margin-bottom: 15px;
+    color: #fff;
+    
+}
+
+
+.form__input{
+    font-family: 'Just Me Again Down Here', cursive;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    display: inline-block;
+    width: 350px;
+    height: 40px;
+    border-radius: 5px;
+    background: #FFF;
+    margin: auto;    
+}
+
+.login__list{
+    margin-bottom: 15px;
+    border: none;
+}
+
+
+.input__submit{
+    border: none;
+    outline: none;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Kadwa', serif;
+    width: 340px;
+    height: 53px;    
+    border-radius: 20px;
+    background: #59249C;
+    margin: auto;
+   
+    color: #fff;
+    cursor: pointer;
+
+}
+
+.input__submit:hover {
+    background-color: #0056b3;
+  }
+
+
+ .serf{
+    
+    width: 480px;
+    height: 250px;
+    overflow-y: scroll;
+    margin: auto;
+    padding: 15px;
+    background-color: #fff;
+    color: #59249C;
+    border-radius: 20px;
+ 
+}
+

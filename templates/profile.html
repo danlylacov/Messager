@@ -1,16 +1,19 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>User Profile</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Welcome!</h1>
-    <p>Fistname: {{ user.firstname }}</p>
-    <p>Lastname: {{ user.lastname }}</p>
+    <form class="banner__home">
+        <h2>Welcome!</h2>
+        <p>Fistname: {{ user.firstname }}  Lastname: {{ user.lastname }}</p>
 
-    <a href="/user/{{user.username}}/send_message">Отправить сообщение</a>
-    <a href="/user/{{user.username}}/show_messages">Входящие сообщения</a>
-    <a href="{{ url_for('main') }}">Back to Home</a>
+        <a href="/user/{{user.username}}/send_message" class="btm">Send a message</a>
+        <a href="/user/{{user.username}}/show_messages" class="btm">Incoming Messages</a>
+        <a href="{{ url_for('main') }}" class="btm">Back to Home</a>
+    </form>
 
     {% if error %}
         <p>{{ error }}</p>

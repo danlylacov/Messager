@@ -1,23 +1,33 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>User Profile</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Входящие сообщения</h1>
+
+    <form class="banner__home">
+        <ul class="style__list">
+            <li class="login__list"> <h2>Incoming Messages</h2></li>
+            <li class="login__list">
+                <div class="serf">
 
 
-    {% for name in sender_names %}
+            {% for name in sender_names %}
 
-        <a href="/user/{{username}}/show_messages/{{name.id}}">{{ name.firstname }} {{name.lastname}}</a><br><br>
+                <a  href="/user/{{username}}/show_messages/{{name.id}}">{{ name.firstname }} {{name.lastname}}</a>
 
+            {% endfor %}
+            <p> there are some nasty things about danya, let him make up this block himself and sort it out since he didn't insert anything here</p>
+            <p> there are some nasty things about danya, let him make up this block himself and sort it out since he didn't insert anything here</p>
 
+                </div>
+            </li>
 
-    {% endfor %}
-
-
-
-    <a href="/user/{{username}}">Back to Home</a>
+            <a href="/user/{{username}}" class="btm">Back to Home</a>
+        </ul>
+    </form>
 
 </body>
 </html>

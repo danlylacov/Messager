@@ -26,8 +26,6 @@ def main():
 @app.route("/send", methods=['POST'])
 def send_message():
     data = request.json
-    print(data)
-
 
     text = data['text']
     sender = data['sender']
@@ -157,6 +155,7 @@ def show_messages(username):
     return render_template('show_messages.html', sender_names=sender_names, username=username)
 
 
+
 @app.route('/user/<username>/show_messages/<id>', methods=['GET', 'POST'])
 def show_chat(username, id):
     def time_from_UNIX(unix_time: float):
@@ -190,11 +189,13 @@ def show_chat(username, id):
                                      'sender': me_id,
                                      'reciever': int(reciever_id)
                                  })
+        db.session.commit()
 
         return redirect(url_for('show_chat', username=username, id=id))
 
 
     return render_template('chat.html', messages=result, sender=sender)
+
 
 
 

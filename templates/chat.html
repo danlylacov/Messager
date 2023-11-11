@@ -1,25 +1,38 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Chat with {{ sender.username }}</h1>
+    <form class="banner__home">
+        <ul class="style__list">
+            <li class="login__list"> <h2>Chat with {{ sender.username }}</h2></li>
+            <li class="login__list">
+                <div class="serf">
 
-    <ul id="messageList">
-        {% for message in messages %}
-            <li>
-                {{ message['message'] }} - Sender: {{ message['sender'] }} - Time: {{ message['time']}}
+                    <ul id="messageList" class="style__list">
+                        {% for message in messages %}
+                            <li>
+                                {{ message['message'] }} - Sender: {{ message['sender'] }} - Time: {{ message['time']}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </li>
-        {% endfor %}
-    </ul>
-        <h1>Отправить сообщение</h1>
-    <form id="messageForm" method="POST" action="">
-    <label for="text">text:</label>
-    <input type="text" id="text" name="text" required><br><br>
-    <input type="submit" value="Отправить" id="submitButton"><br><br>
     </form>
 
+
+            <form id="messageForm" method="POST" action="">
+
+            <li class="login__list"> <input class="form__input"  placeholder="Message"  type="text" id="text" name="text" required> </li>
+            <li class="login__list"> <input class="input__submit" type="submit" value="Submit" id="submitButton"> </li>
+
+            </form>
+        </ul>
+    </form>
 
 
 </body>

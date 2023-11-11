@@ -1,14 +1,18 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>HomePage</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>MENU:</h1>
-    <form>
-        <a href='/register'>Registration</a>
-        <a href='/enter'>Enter</a>
+
+
+    <form class="banner__home">
+        <h2 class="menu__home">MENU:</h2>
+        <a href='/register' class="btm">Registration</a>
+
+        <a href='/enter' class="btm">Enter</a>
     </form>
 </body>
 </html>
