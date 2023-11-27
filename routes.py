@@ -8,13 +8,6 @@ from cryptography.bcrypt import Bcrypt
 from cryptography.RSA import RSA
 
 
-database = []
-# Структура database
-# {
-# 'name': 'Имя',
-# 'text': 'Текст сообщения.',
-# 'time': Время когда отправлено сообщение
-# },
 
 @app.route("/home")
 @app.route("/")
