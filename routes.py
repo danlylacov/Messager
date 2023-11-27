@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, render_template, make_response
+from flask import request, redirect, url_for, render_template, make_response, abort
 from time import time
 from models import User, Message
 from app import app, db
@@ -43,6 +43,7 @@ def send_message():
 
 @app.route("/register", methods = ['POST', 'GET'])
 def registaration():
+    user_exists = False
     if request.method == 'POST':
         username = request.form['username']
         password = Bcrypt.hash_password(request.form['password'].encode())
@@ -55,21 +56,25 @@ def registaration():
         publickey = str(keys[0])
         privatekey = str(keys[1])
 
-        make_response().set_cookie('ded','ceeceec')
+        existing_user = User.query.filter_by(username=username).first()
 
-        new_user = User(
-            username = username,
-            password = password,
-            firstname = firstname,
-            lastname = lastname,
-            publickey = publickey
-        )
-        db.session.add(new_user)
-        db.session.commit()
+        if existing_user:
+            user_exists = True
+            return render_template('registration.html', user_exists=user_exists)
+        else:
+            new_user = User(
+                username=username,
+                password=password,
+                firstname=firstname,
+                lastname=lastname,
+                publickey=publickey
+            )
+            db.session.add(new_user)
+            db.session.commit()
 
-        return redirect(url_for('main'))
+            return redirect(url_for('main'))
 
-    return render_template('registration.html')
+    return render_template('registration.html', user_exists = user_exists)
 
 
 @app.route("/enter", methods=['POST', 'GET'])
@@ -126,27 +131,28 @@ def senddd_message(username):
 
 @app.route('/user/<username>/show_messages', methods=['GET', 'POST'])
 def show_messages(username):
-    user_data = User.query.filter_by(username=username).first()
-    user_data = {'firstname': user_data.firstname, 'lastname': user_data.lastname, 'id': user_data.id,
-                 'username': username}
+    user_object = User.query.filter_by(username=username).first()
+    if user_object is None:
+        abort(404)  # или другой способ обработки отсутствия пользователя
 
+    user_data = {'firstname': user_object.firstname,
+                 'lastname': user_object.lastname,
+                 'id': user_object.id,
+                 'username': username}
 
     messages = Message.query.filter_by(reciever=user_data['id']).all()
 
-    sender_ids = []
-
+    sender_ids = set()
     for message in messages:
-        sender_ids.append(message.sender)
+        sender_ids.add(message.sender)
 
-    sender_ids = list(set(sender_ids))
     sender_names = []
-    for i in range(len(sender_ids)):
-        user = User.query.filter_by(id=sender_ids[i]).first()
-        sender_names.append({'firstname' : str(user.firstname), 'lastname' : str(user.lastname), 'id' : sender_ids[i]})
-
+    for sender_id in sender_ids:
+        user = User.query.filter_by(id=sender_id).first()
+        if user:
+            sender_names.append({'firstname': user.firstname, 'lastname': user.lastname, 'id': sender_id})
 
     return render_template('show_messages.html', sender_names=sender_names, username=username)
-
 
 
 @app.route('/user/<username>/show_messages/<id>', methods=['GET', 'POST'])
@@ -163,11 +169,14 @@ def show_chat(username, id):
     messages_to = Message.query.filter_by(reciever=me_id, sender=int(id)).all()
 
     result = []
+    sender = User.query.filter_by(id=id).first()
     for message in messages_from:
-        sender = User.query.filter_by(id=id).first()
         result.append( { 'message' : message.text, 'sender' : username, 'time' : time_from_UNIX(float(message.time)) } )
     for message in messages_to:
-        result.append( { 'message' : message.text, 'sender' : sender.username, 'time' : time_from_UNIX(float(message.time)) } )
+        try:
+            result.append( { 'message' : message.text, 'sender' : sender.username, 'time' : time_from_UNIX(float(message.time)) } )
+        except:
+            pass
 
     result = sorted(result, key=lambda x: x['time'])
 
@@ -186,8 +195,8 @@ def show_chat(username, id):
 
         return redirect(url_for('show_chat', username=username, id=id))
 
-
-    return render_template('chat.html', messages=result, sender=sender)
+    print(username)
+    return render_template('chat.html', messages=result, sender=sender, username=username)
 
 
 

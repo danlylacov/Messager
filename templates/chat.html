@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,31 +7,35 @@
 <body>
     <form class="banner__home">
         <ul class="style__list">
-            <li class="login__list"> <h2>Chat with {{ sender.username }}</h2></li>
+            <li class="login__list">
+                <h2>Chat with {{ sender.username }}</h2>
+            </li>
             <li class="login__list">
                 <div class="serf">
-
                     <ul id="messageList" class="style__list">
                         {% for message in messages %}
-                            <li>
-                                {{ message['message'] }} - Sender: {{ message['sender'] }} - Time: {{ message['time']}}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                            <li class="{% if message['sender'] == username %}outgoing{% else %}incoming{% endif %}">
+                                {{ message['message'] }}
+                                <span class="time">{{ message['time'].split(' ')[1] }}</span>
+                            </li>{% endfor %}
+                </ul>
                 </div>
             </li>
-    </form>
-
-
-            <form id="messageForm" method="POST" action="">
-
-            <li class="login__list"> <input class="form__input"  placeholder="Message"  type="text" id="text" name="text" required> </li>
-            <li class="login__list"> <input class="input__submit" type="submit" value="Submit" id="submitButton"> </li>
-
-            </form>
         </ul>
     </form>
 
-
+    <form id="messageForm" method="POST" action="">
+        <ul class="style__list">
+            <li class="login__list">
+                <input class="form__input" placeholder="Message" type="text" id="text" name="text" required>
+            </li>
+            <li class="login__list">
+                <input class="input__submit" type="submit" value="Submit" id="submitButton">
+            </li>
+            <li class="login__list">
+                <a href="/user/{{ username }}/show_messages" class="btm">Go back to the main menu</a>
+            </li>
+        </ul>
+    </form>
 </body>
 </html>
