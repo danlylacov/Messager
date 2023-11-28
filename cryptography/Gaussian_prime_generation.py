@@ -5,8 +5,8 @@ import math
 class GaussGenerator:
 
     def __init__(self):
-        self.p = self.generate_prime(1024)
-        self.q = self.generate_prime(1024)
+        self.p = self.generate_prime(124)
+        self.q = self.generate_prime(124)
 
 
     def is_prime(self, num, k=5):

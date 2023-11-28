@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,22 +10,17 @@
         <ul class="style__list">
             <li class="login__list"> <h2>Incoming Messages</h2></li>
             <li class="login__list">
-                <div class="serf">
-
-
-            {% for name in sender_names %}
-
-                <a  href="/user/{{username}}/show_messages/{{name.id}}">{{ name.firstname }} {{name.lastname}}</a>
-
-            {% endfor %}
-
-
+                <div id="messagesContainer" class="serf">
+                    {% for name in sender_names %}
+                        <a href="/user/{{username}}/show_messages/{{name.id}}" class="message-link">{{ name.firstname }} {{name.lastname}}</a>
+                    {% endfor %}
                 </div>
             </li>
-
             <a href="/user/{{username}}" class="btm">Back to Home</a>
         </ul>
     </form>
+
+
 
 </body>
 </html>

@@ -7,8 +7,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     firstname = db.Column(db.String(80), nullable=False)
     lastname = db.Column(db.String(80), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    publickey = db.Column(db.String(10000), nullable=False)
+    password = db.Column(db.String(1000), nullable=False)
+    publickey = db.Column(db.String(100000), nullable=False)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.id}')"
@@ -20,5 +20,11 @@ class Message(db.Model):
     reciever = db.Column(db.Integer, nullable=False)
     text = db.Column(db.String)
     time = db.Column(db.String, nullable=False)
+
+
+class Keys(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(1000), nullable=False)
+    privateKey = db.Column(db.String(100000), nullable=False)
 
 

@@ -66,7 +66,7 @@ class RSA(GaussGenerator):
 
     def fast_exponentiation(self, base, exponent, mod):
         result = 1
-        while exponent > 0:
+        while int(exponent) > 0:
             if exponent % 2 == 1:
                 result = (result * base) % mod
             base = (base * base) % mod
@@ -85,13 +85,16 @@ class RSA(GaussGenerator):
         for i in range(len(message)):
             message[i] = self.fast_exponentiation(message[i], private_key[0], private_key[1])
 
+        message = [num % 0x110000 for num in message]
+
         return self.num_to_message(message)
 
 
 
 rsa = RSA()
 keys = rsa.create_keys()
-mes = rsa.encrypt('f', keys[0])
-print(rsa.decrypt(mes, keys[1]))
+mes = rsa.encrypt('Hi!', [9597959, 9604333])
+print(mes)
+print(rsa.decrypt(mes, [9211607, 9604333]))
 
 

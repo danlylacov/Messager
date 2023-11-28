@@ -11,18 +11,19 @@
         <ul class="style__list">
             <li class="login__list"> <h2>Send a message</h2></li>
             <li class="login__list"> <input class="form__input" placeholder="Username" type="text" id="username" name="username" required> </li>
+            {% if error %}
+                <p class="warning">*User with such username doesn't exists!</p>
+            {% endif %}
             <li class="login__list"> <input class="form__input" placeholder="Text"  type="text" id="text" name="text" required> </li>
             <li class="login__list"> <input class="input__submit" type="submit" value="Submit"> </li>
-            <li class="login__list"> <a href="/user/{{str(username)}}" class="btm">Go back to the main menu</a></li>
+            <li class="login__list"> <a href="/user/{{user.username}}" class="btm">Go back to the main menu</a></li>
 
 
         </ul>
 
     </form>
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+
 
 </body>
 </html>

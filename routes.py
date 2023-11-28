@@ -1,11 +1,13 @@
-from flask import request, redirect, url_for, render_template, make_response, abort
+from flask import request, redirect, url_for, render_template, make_response, abort, jsonify
 from time import time
-from models import User, Message
+from models import User, Message, Keys
 from app import app, db
 import requests
 import datetime
 from cryptography.bcrypt import Bcrypt
 from cryptography.RSA import RSA
+
+from ast import literal_eval
 
 
 
@@ -25,11 +27,15 @@ def send_message():
     reciever = data['reciever']
 
 
+    rsa = RSA()
+    publickey = User.query.filter_by(id=reciever).first()
+    publickey = literal_eval(publickey.publickey)
+    encrypt_text = rsa.encrypt(text, publickey)
 
     message = Message(
         sender=int(sender),
         reciever=int(reciever),
-        text=str(text),
+        text=str(encrypt_text),
         time=str(time())
     )
     db.session.add(message)
@@ -72,6 +78,13 @@ def registaration():
             db.session.add(new_user)
             db.session.commit()
 
+            new_key = Keys(
+                user_id=User.query.filter_by(username=username).first().id,
+                privateKey=privatekey
+            )
+            db.session.add(new_key)
+            db.session.commit()
+
             return redirect(url_for('main'))
 
     return render_template('registration.html', user_exists = user_exists)
@@ -91,10 +104,13 @@ def enter():
         username = request.form['username']
         password = request.form['password']
 
+    try:
         if Bcrypt.check_password(password.encode(), get_user_credentials(str(username))):
             return redirect(url_for('profile', username=username))
         else:
-            return render_template('enter.html', error="Invalid username or password. Please try again.")
+            return render_template('enter.html', error="Invalid password. Please try again.")
+    except:
+        return render_template('enter.html', error="Invalid username. Please try again.")
 
 
     return render_template('enter.html')
@@ -115,18 +131,21 @@ def senddd_message(username):
 
     if request.method == 'POST':
         reciever_username = str(request.form['username'])
-        reciever_id = User.query.filter_by(username=reciever_username).first().id
+        try:
+            reciever_id = User.query.filter_by(username=reciever_username).first().id
 
-        text = request.form['text']
-        print(reciever_id)
-        response = requests.post(url='http://127.0.0.1:5000/send',
-                                 json={
-                                     'text': text,
-                                     'sender': user_data['id'],
-                                     'reciever': int(reciever_id)
-                                 })
+            text = request.form['text']
 
-    return render_template('send_message.html', user = user_data)
+            response = requests.post(url='http://127.0.0.1:5000/send',
+                                     json={
+                                         'text': text,
+                                         'sender': user_data['id'],
+                                         'reciever': int(reciever_id)
+                                     })
+
+            return render_template('send_message.html', user = user_data, error = False)
+        except:
+            return render_template('send_message.html', user=user_data, error = True)
 
 
 @app.route('/user/<username>/show_messages', methods=['GET', 'POST'])
@@ -164,27 +183,34 @@ def show_chat(username, id):
 
     me= User.query.filter_by(username=username).first()
     me_id = me.id
+    
 
     messages_from = Message.query.filter_by(reciever=int(id), sender=me_id).all()
     messages_to = Message.query.filter_by(reciever=me_id, sender=int(id)).all()
 
     result = []
-    sender = User.query.filter_by(id=id).first()
-    for message in messages_from:
-        result.append( { 'message' : message.text, 'sender' : username, 'time' : time_from_UNIX(float(message.time)) } )
-    for message in messages_to:
-        try:
-            result.append( { 'message' : message.text, 'sender' : sender.username, 'time' : time_from_UNIX(float(message.time)) } )
-        except:
-            pass
+    sender = User.query.filter_by(id=me_id).first()
+    private_key_me = Keys.query.filter_by(user_id=sender.id).first().privateKey
 
+    private_key_send = Keys.query.filter_by(user_id=int(id)).first().privateKey
+
+
+    rsa = RSA()
+
+
+
+    for message in messages_from:
+        result.append( { 'message' : rsa.decrypt(literal_eval(message.text), literal_eval(private_key_send)), 'sender' : User.query.filter_by(id=int(id)).first().username, 'time' : time_from_UNIX(float(message.time)) } )
+    for message in messages_to:
+        result.append( { 'message' : rsa.decrypt(literal_eval(message.text), literal_eval(private_key_me)), 'sender' : sender.username, 'time' : time_from_UNIX(float(message.time)) } )
     result = sorted(result, key=lambda x: x['time'])
+    print(result)
 
     if request.method == 'POST':
         reciever_id = id
 
         text = request.form['text']
-        print(reciever_id)
+
         response = requests.post(url='http://127.0.0.1:5000/send',
                                  json={
                                      'text': text,
@@ -195,25 +221,10 @@ def show_chat(username, id):
 
         return redirect(url_for('show_chat', username=username, id=id))
 
-    print(username)
     return render_template('chat.html', messages=result, sender=sender, username=username)
 
 
 
 
-# оно работает только с путем, просто привызове не работает, надо разобраться
-@app.route('/cookie')
-def cookie():
-    res = make_response("Setting a cookie")
-    res.set_cookie('foo', 'bar', max_age=60*60*24*365*2)
-    return res
-
-@app.route('/get_cookie')
-def get_cookie_value():
-    cookie_value = request.cookies.get('foo')
-    if cookie_value is not None:
-        return f"Значение файла cookie 'my_cookie': {cookie_value}"
-    else:
-        return "Файл cookie 'my_cookie' не найден."
 
 
