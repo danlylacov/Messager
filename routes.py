@@ -148,6 +148,9 @@ def senddd_message(username):
             return render_template('send_message.html', user=user_data, error = True)
 
 
+    return render_template('send_message.html', user=user_data, error=False)
+
+
 @app.route('/user/<username>/show_messages', methods=['GET', 'POST'])
 def show_messages(username):
     user_object = User.query.filter_by(username=username).first()
