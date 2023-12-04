@@ -177,6 +177,20 @@ def show_messages(username):
     return render_template('show_messages.html', sender_names=sender_names, username=username)
 
 
+@app.route('/user/<username>/delete_messages/<id>', methods=['GET', 'POST'])
+def delete_message(username, id):
+    me = User.query.filter_by(username=username).first()
+    me_id = me.id
+
+    Message.query.filter_by(reciever=int(id), sender=me_id).delete()
+    Message.query.filter_by(reciever=me_id, sender=int(id)).delete()
+
+    db.session.commit()
+
+    return redirect(url_for('show_messages', username=username))
+
+
+
 @app.route('/user/<username>/show_messages/<id>', methods=['GET', 'POST'])
 def show_chat(username, id):
     def time_from_UNIX(unix_time: float):

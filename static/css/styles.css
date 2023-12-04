@@ -124,22 +124,22 @@ a:hover {
 }
 
 
-/* Стили для входящих сообщений */
+
 .outgoing {
-    background-color: #e0e0e0; /* Цвет фона для входящих сообщений */
-    margin-left: 50px; /* Отступ слева для входящих сообщений */
-    padding: 8px; /* Поля внутри элемента для входящих сообщений */
-    border-radius: 8px; /* Закругленные углы для входящих сообщений */
+    background-color: #e0e0e0;
+    margin-left: 50px;
+    padding: 8px;
+    border-radius: 8px;
     margin-bottom: 10px;
     position: relative;
 }
 
-/* Стили для исходящих сообщений */
+
 .incoming {
-    background-color: #007bff; /* Цвет фона для исходящих сообщений */
-    margin-right: 50px; /* Отступ справа для исходящих сообщений */
-    padding: 8px; /* Поля внутри элемента для исходящих сообщений */
-    border-radius: 8px; /* Закругленные углы для исходящих сообщений */
+    background-color: #007bff;
+    margin-right: 50px;
+    padding: 8px;
+    border-radius: 8px;
     margin-bottom: 10px;
     position: relative;
 }
@@ -148,10 +148,27 @@ a:hover {
     position: absolute;
     bottom: 0;
     right: 5px;
-    color: #2F4F4F; /* Цвет времени (можете настроить под свой дизайн) */
-    font-size: 0.8em; /* Размер шрифта времени (можете настроить под свой дизайн) */
+    color: #2F4F4F;
+    font-size: 0.8em;
 }
 
 .warning {
     color: red;
+}
+
+.delete {
+    background-color: #0000FF;
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+
+    position: relative;
+    top: -132px;
+    left: 156px;
 }

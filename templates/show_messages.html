@@ -13,6 +13,7 @@
                 <div id="messagesContainer" class="serf">
                     {% for name in sender_names %}
                         <a href="/user/{{username}}/show_messages/{{name.id}}" class="message-link">{{ name.firstname }} {{name.lastname}}</a>
+                        <a href="/user/{{username}}/delete_messages/{{name.id}}" class = 'delete'>delete</a>
                     {% endfor %}
                 </div>
             </li>

@@ -5,14 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-app.config["SQLALCHEMY_ECHO"] = True
-app.config["SQLALCHEMY_RECORD_QUERIES"] = True
+app.config["SQLALCHEMY_ECHO"] = False
+app.config["SQLALCHEMY_RECORD_QUERIES"] = False
 
 db = SQLAlchemy(app)
 
-
-
-# Импорт моделей после создания db
 
 
 # Импорт маршрутов
@@ -20,4 +17,4 @@ from routes import *
 
 if __name__ == '__main__':
 
-    app.run(debug=True)
+    app.run(debug=False)
